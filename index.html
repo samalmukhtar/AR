@@ -2,326 +2,1176 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>علم الرمل - رقعة الشطرنج الناطقة</title>
-    <style>
-        :root {
-            --primary: #2c5c7a;
-            --secondary: #4e3629;
-            --accent: #d4af37;
-            --light: #f8f5e6;
-            --dark: #1a1a1a;
-            --success: #28a745;
-            --danger: #dc3545;
-            --warning: #ffc107;
-            --info: #17a2b8;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: var(--light);
-            line-height: 1.6;
-            padding: 20px;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--accent);
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            color: var(--accent);
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        h2 {
-            font-size: 1.8rem;
-            margin: 20px 0;
-            color: var(--accent);
-        }
-
-        h3 {
-            font-size: 1.4rem;
-            margin: 15px 0;
-            color: var(--accent);
-        }
-
-        .tabs {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .tab {
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--accent);
-            border-radius: 5px;
-            margin: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .tab:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .tab.active {
-            background: var(--accent);
-            color: var(--dark);
-            font-weight: bold;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .chess-board {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(8, 1fr);
-            grid-template-rows: repeat(8, 1fr);
-            border: 3px solid var(--accent);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-        }
-
-        .square {
-            aspect-ratio: 1/1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .square.light {
-            background-color: #f0d9b5;
-            color: var(--dark);
-        }
-
-        .square.dark {
-            background-color: #b58863;
-            color: var(--light);
-        }
-
-        .square:hover {
-            transform: scale(1.05);
-            z-index: 2;
-            box-shadow: 0 0 10px var(--accent);
-        }
-
-        .square.mother {
-            border: 3px solid var(--success);
-        }
-
-        .square.daughter {
-            border: 3px solid var(--info);
-        }
-
-        .square.granddaughter {
-            border: 3px solid var(--warning);
-        }
-
-        .square-content {
-            text-align: center;
-            padding: 5px;
-            font-size: 0.9rem;
-        }
-
-        .controls {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .control-group {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        input, select, button {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid var(--accent);
-            border-radius: 5px;
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--light);
-        }
-
-        button {
-            background: var(--accent);
-            color: var(--dark);
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        button:hover {
-            background: #e6c12b;
-            transform: translateY(-2px);
-        }
-
-        .result {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            border: 1px solid var(--accent);
-        }
-
-        .house-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .house-card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .house-card h4 {
-            color: var(--accent);
-            margin-bottom: 10px;
-            border-bottom: 1px solid var(--accent);
-            padding-bottom: 5px;
-        }
-
-        .explanation {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border: 1px solid var(--accent);
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 100;
-            overflow: auto;
-        }
-
-        .modal-content {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            margin: 5% auto;
-            padding: 20px;
-            border-radius: 15px;
-            width: 80%;
-            max-width: 800px;
-            position: relative;
-            border: 2px solid var(--accent);
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
-        }
-
-        .close {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            color: var(--light);
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .external-link {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: bold;
-            margin: 0 5px;
-        }
-
-        .external-link:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 768px) {
-            .chess-board {
-                max-width: 90vw;
-            }
-            
-            .square-content {
-                font-size: 0.7rem;
-            }
-            
-            .controls {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .rahman-tree {
-            background: rgba(0, 100, 0, 0.2);
-            border: 2px dashed var(--success);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-        }
-    </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>حاسبة علم الرمل • رقعة الشطرنج الناطقة</title>
+<style>
+:root{
+  --bg:#071025; --card:#071524; --muted:#0f2136; --ink:#e6eef6;
+  --accent:#22d3ee; --accent2:#a78bfa; --ok:#10b981; --warn:#f59e0b;
+  --glass: rgba(255,255,255,0.03);
+  --zoom-level: 1;
+}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(135deg,var(--bg),#021022);color:var(--ink);font:500 15px/1.6 system-ui,Segoe UI,Roboto,Arial}
+.wrap{max-width:1200px;margin:18px auto;padding:18px}
+.header{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 10px 30px #0008}
+h1{font-size:18px;margin:0}
+.tabs{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.tab{padding:8px 12px;border-radius:10px;background:var(--glass);cursor:pointer;border:1px solid rgba(255,255,255,0.03)}
+.tab.active{outline:2px solid var(--accent);background:linear-gradient(90deg,rgba(34,211,238,0.06),rgba(167,139,250,0.04))}
+.container{display:grid;gap:16px;margin-top:12px}
+.grid2{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:1000px){.grid2{grid-template-columns:0.7fr 0.3fr}}
+.card{background:linear-gradient(180deg,#051329,#031422);border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,0.03)}
+.help{font-size:13px;color:#9fb1c4}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+input,select,textarea,button{background:#081823;border:1px solid rgba(255,255,255,0.02);color:var(--ink);padding:8px 10px;border-radius:8px}
+.kbd{font-family:ui-monospace,monospace;background:#06131e;padding:4px 8px;border-radius:6px}
+.chess{width:100%;max-width:720px;border-radius:12px;overflow:hidden;border:6px solid rgba(255,255,255,0.02);position:relative}
+.board{display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);width:100%;height:720px;transform:scale(var(--zoom-level));transform-origin:center;transition:transform 0.3s ease}
+.sq{display:grid;place-items:center;font-size:12px;padding:6px;text-align:center;user-select:none}
+.light{background:#dfe7ee10}
+.dark{background:#0d2030}
+.piece{display:grid;place-items:center;border-radius:8px;padding:6px;background:linear-gradient(180deg,#071a2a,#021824);border:1px solid rgba(255,255,255,0.03)}
+.badge{font-size:12px;padding:4px 8px;border-radius:999px;border:1px solid rgba(255,255,255,0.03)}
+.scroll{max-height:320px;overflow:auto;padding:8px;border-radius:8px;border:1px dashed rgba(255,255,255,0.02)}
+.modal-back{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:60}
+.modal{width:min(920px,96%);background:#071524;border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.04);max-height:90vh;overflow:auto}
+.small{font-size:13px;color:#92a9bb}
+.footer{font-size:13px;color:#92a9bb;margin-top:12px}
+.table{width:100%;border-collapse:collapse;margin-top:8px}
+.table th,.table td{border:1px solid rgba(255,255,255,0.03);padding:6px}
+.table th{background:rgba(255,255,255,0.02)}
+.btn{cursor:pointer}
+.rumal-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin:1px;background:#e6eef6}
+.rumal-dot.double{width:12px}
+/* ألوان خاصة للحاشية (الصف 1 و8) */
+.sq[data-rank="1"], .sq[data-rank="8"]{border:1px solid var(--accent);box-shadow:0 0 6px rgba(34,211,238,0.2)}
+/* ألوان خاصة للجنود (الصف 2 و7) */
+.sq[data-rank="2"], .sq[data-rank="7"]{border:1px solid var(--accent2);box-shadow:0 0 6px rgba(167,139,250,0.2)}
+/* ألوان خاصة للساحة (الصفوف 3-6) */
+.sq[data-rank="3"], .sq[data-rank="4"], .sq[data-rank="5"], .sq[data-rank="6"]{opacity:0.8}
+/* تصميم خاص للبلاطات التي تحتوي على رسائل الشجرة */
+.sq.rumal-message { animation: pulse 2s infinite; }
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(167,139,250,0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(167,139,250,0); }
+  100% { box-shadow: 0 0 0 0 rgba(167,139,250,0); }
+}
+.rumal-pattern {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin: 4px 0;
+}
+.tree-analysis {
+  background: #0a1c2a;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 8px 0;
+}
+.tree-analysis h4 {
+  margin: 0 0 8px 0;
+  color: #a78bfa;
+}
+.analysis-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+.analysis-item {
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+  padding: 8px;
+}
+/* عناصر التحكم في التكبير */
+.zoom-controls {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  gap: 8px;
+  background: rgba(7, 21, 36, 0.8);
+  padding: 8px;
+  border-radius: 8px;
+  z-index: 10;
+}
+.zoom-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.zoom-display {
+  padding: 0 10px;
+  display: grid;
+  place-items: center;
+  min-width: 50px;
+}
+/* بلاطة المعلومات */
+.info-tile {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #0a1c2a, #071524);
+  border: 2px solid var(--accent);
+  border-radius: 12px;
+  padding: 16px;
+  max-width: 500px;
+  width: 90%;
+  z-index: 100;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  display: none;
+}
+.info-tile h3 {
+  margin: 0 0 12px 0;
+  color: var(--accent);
+  text-align: center;
+}
+.info-tile-content {
+  max-height: 300px;
+  overflow-y: auto;
+}
+.close-tile {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  font-size: 18px;
+  cursor: pointer;
+}
+/* تحسينات للواجهة عند التكبير */
+.zoomed .sq {
+  font-size: calc(12px * var(--zoom-level));
+}
+.zoomed .piece {
+  padding: calc(6px * var(--zoom-level));
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>علم الرمل - رقعة الشطرنج الناطقة</h1>
-            <p>تطبيق متكامل لحسابات علم الرمل وفق منهج شجرة الرحمن</p>
-        </header>
-
-        <div class="tabs">
-            <div class="tab active" data-tab="input">الإدخال</div>
-            <div class="tab" data-tab="board">الرقعة</div>
-            <div class="tab" data-tab="houses">البيوت</div>
-            <div class="tab" data-tab="explanation">التفسير</div>
-            <div class="tab" data-tab="about">حول التطبيق</div>
+<div class="wrap">
+  <div class="header">
+    <div class="brand"><div class="logo" aria-hidden="true"></div><h1>حاسبة علم الرمل • رقعة الشطرنج الناطقة</h1></div>
+    <div class="row">
+      <button id="exportBtn" class="btn">تصدير JSON</button>
+      <button id="importBtn" class="btn">استيراد JSON</button>
+      <label class="badge small">يحفظ محليًا</label>
+    </div>
+  </div>
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-tab="input">المُدخلات</div>
+    <div class="tab" data-tab="board">الرقعة</div>
+    <div class="tab" data-tab="tables">الجداول</div>
+    <div class="tab" data-tab="pgn">تحليل PGN</div>
+    <div class="tab" data-tab="about">حول & الطاووس</div>
+  </div>
+  <div class="container">
+    <!-- INPUT -->
+    <section class="card tabpane" data-pane="input">
+      <h3>إدخال 0/1 (0 = فرد ، 1 = زوج)</h3>
+      <div class="help">أدخل 4 خانات (مثال: <span class="kbd">0101</span>). بعد الإدخال: انقر على خانة من الصف 1 أو 8 لتثبيت الشكل هناك. انقر مرتين لعرض الشرح الموسع.</div>
+      <div class="row" style="margin-top:8px">
+        <label>الوضع:</label>
+        <select id="parityMode"><option value="odd0">0 = فرد (مستحسن)</option><option value="odd1">1 = زوج</option></select>
+        <label class="small">المُدخل السريع:</label>
+        <input id="quickBits" placeholder="مثال: 0101" maxlength="4" style="width:120px"/>
+        <button id="quickClear">مسح</button>
+      </div>
+      <hr style="border:none;border-top:1px solid rgba(255,255,255,0.03);margin:12px 0">
+      <h4>إنشاء البنية (الأمهات → 16 شكل)</h4>
+      <div class="row">
+        <button id="addFromInput" class="btn">إضافة (كم أم)</button>
+        <button id="randomMoms" class="btn">توليد عشوائي</button>
+        <button id="resetMoms" class="btn">إعادة الضبط</button>
+        <button id="build16" class="btn">توليد الـ16</button>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <button id="fillEmptySquares" class="btn">ملء الفراغات بشجرة الرحمن</button>
+        <button id="analyzeAllWords" class="btn">تحليل جميع الكلمات</button>
+      </div>
+      <div id="momsRow" class="row" style="margin-top:8px;overflow:auto"></div>
+      <div id="resRow" class="row" style="margin-top:8px;flex-wrap:wrap"></div>
+    </section>
+    <!-- BOARD -->
+    <section class="grid2">
+      <div class="card tabpane" data-pane="board" style="min-height:520px">
+        <h3>رقعة الرمل/الشطرنج</h3>
+        <div class="row">
+          <label>سمة الجنود:</label>
+          <select id="pawnTheme"><option value="grain">🌾 قمح (مضاعفات)</option><option value="atom">⚛️ ذرّ (بتّات)</option></select>
+          <label><input type="checkbox" id="ttsToggle" checked/> تفعيل الشطرنج الناطق (TTS)</label>
         </div>
-<div class="sand-knowledge-interactive" id="sand-knowledge-interactive">
+        <div class="help small" style="margin-top:6px">انقر على خانة من الصف 1 أو 8 بعد إدخال 4 خانات لإسقاط الشكل. انقر مرتين على خانة لفتح الشرح الموسع.</div>
+        <div class="chess" style="margin-top:10px">
+          <div class="board" id="board"></div>
+          <div class="zoom-controls">
+            <button class="zoom-btn" id="zoomOut">-</button>
+            <div class="zoom-display" id="zoomLevel">100%</div>
+            <button class="zoom-btn" id="zoomIn">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>أرضية المعلومات</h3>
+        <div id="squareInfo" class="small">اختر خانة لعرض التفاصيل (الشكل/البيت/الرموز...)</div>
+        <div style="margin-top:8px" id="infoLog" class="scroll small"></div>
+      </div>
+    </section>
+    <!-- TABLES -->
+    <section class="card tabpane" data-pane="tables" style="display:none">
+      <h3>قاموس الأشكال & البيوت</h3>
+      <div class="help small">يمكنك تعديل أي خلية ثم حفظ التغييرات.</div>
+      <div id="figTableWrap" style="margin-top:10px"></div>
+      <h4 style="margin-top:12px">البيوت 1–12 (توليد آلي بعد الـ16)</h4>
+      <div id="houseTableWrap" style="margin-top:8px"></div>
+      <h4 style="margin-top:12px">الأسماء الحسنى وارتباطها</h4>
+      <div id="divineNamesTable" style="margin-top:8px"></div>
+    </section>
+    <!-- PGN -->
+    <section class="card tabpane" data-pane="pgn" style="display:none">
+      <h3>تحليل ملف PGN وفق الرمل</h3>
+      <div class="row">
+        <input type="file" id="filePGN" accept=".pgn,text/plain"/>
+        <button id="btnLoadPGN" class="btn">تحميل</button>
+        <button id="btnSample" class="btn">مثال PGN</button>
+      </div>
+      <textarea id="pgnText" rows="6" style="width:100%;margin-top:8px" placeholder="الصق PGN هنا"></textarea>
+      <div class="row" style="margin-top:8px">
+        <button id="analyzePGN" class="btn">حلّل وفق الرمل</button>
+      </div>
+      <div id="pgnLog" class="scroll small" style="margin-top:8px"></div>
+    </section>
+    <!-- ABOUT -->
+    <section class="card tabpane" data-pane="about" style="display:none">
+      <h3>حول الربط بسلسلة الشيخ طاووس</h3>
+      <p class="small">وضعت ملخّصًا من مصادر عامة لعلم الرمل (الأمهات → 16 شكل → البيوت → العناصر والكواكب) كمرجع للشروحات داخل الـmodal. إن رغبت اقتباسات حرفية من فيديوهاته أدرجها هنا (أو الصق الـtranscript في الحقل الخاص داخل كل شاشة موسّعة) وسيتم عرضها مع إشارة زمنية.</p>
+      <h4>ملخص نقاط شائعة في سلسلة "علم الرمل" (مُجمّع)</h4>
+      <ul class="small">
+        <li>خطوات العمل: استخراج الأمهات (4) → توليد البنات/نواتج → الوصول إلى 16 شكلًا تفسيرياً.</li>
+        <li>ترتبط الأشكال بالعناصر الأربعة (نار/تراب/هواء/ماء) وبكواكب/مؤثرات سماوية لتحديد الطابع.</li>
+        <li>البيوت تُستخدم للإشارة إلى مجالات الحياة (نفس، مال، عمل، سفر، إلخ).</li>
+        <li>توجد مدارس مختلفة (الزناتي، إدريس، محلية)؛ لذا التطبيق قابل للتعديل والاحتفاظ بوصفك الخاص.</li>
+      </ul>
+      <h4>إضافة نص/Transcript للفيديو (لطاووس)</h4>
+      <div class="small">لإدراج اقتباسات حرفية من الفيديو: الصق نص الـtranscript هنا وسيظهر داخل الشرح الموسّع عند الطلب.</div>
+      <textarea id="videoTranscript" rows="6" style="width:100%;margin-top:8px" placeholder="الصق هنا Transcript للفيديو إن أردت اقتباسات حرفية..."></textarea>
+      <div style="margin-top:8px" class="row">
+        <button id="applyTranscript" class="btn">احفظ النص في القاعدة</button>
+      </div>
+    </section>
+    <div class="footer">النسخة المكتملة — يمكنك تعديل القواميس داخل التطبيق. حفظ محلي: نعم. لا يتم إرسال بيانات للخارج.</div>
+  </div>
+</div>
+
+<!-- Modal للشرح الموسع -->
+<div class="modal-back" id="modalBack">
+  <div class="modal" id="modal">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h3 id="modalTitle">شرح الشكل</h3>
+      <div><button id="modalClose" class="btn">إغلاق</button></div>
+    </div>
+    <div id="modalBody" style="margin-top:8px"></div>
+  </div>
+</div>
+
+<!-- بلاطة المعلومات -->
+<div class="info-tile" id="infoTile">
+  <button class="close-tile" id="closeTile">×</button>
+  <h3 id="tileTitle">معلومات الرمل</h3>
+  <div class="info-tile-content" id="tileContent"></div>
+</div>
+
+<input type="file" id="jsonIn" accept="application/json" style="display:none"/>
+<script>
+/* ---------- البيانات الأساسية ---------- */
+// الأسماء الحسنى مع ربطها بالأشكال والبيوت
+const DIVINE_NAMES = [
+  { name: "الرحمن", abjad: 298, meaning: "المنعم بالرحمة على جميع الخلق", 
+    associatedForms: ["الشمس", "الحمل", "الأسد"], 
+    associatedHouse: 1,
+    secretMessage: "السر: ابدأ أعمالك بالرحمة وستجد الخير في كل تحركاتك" },
+  // ... (بقية الأسماء الحسنى)
+];
+
+// السور القرآنية مع ربطها بالخانات
+const QURAN_SURAH = [
+  { number: 1, name: "الفاتحة", verses: 7, type: "مكية", 
+    associatedSquares: ["a1", "h8", "e4"], 
+    geomanticSignificance: "الربط بين البدايات والفرص الجديدة" },
+  // ... (بقية السور)
+];
+
+/* ---------- بيانات مبدئية (قابلة للتعديل) ---------- */
+/* كل صف: [bits (قياسي: 1=فرد), arabicName, latin, element, planet, sign, quality, note] */
+const DEFAULT_FIGS = [
+  ['1111','الطريق/الانصراف','Via','ماء','القمر','—','تغيّر','حركة وتحوّل'],
+  // ... (بقية الأشكال)
+];
+
+// تعريف أشكال الرمل الـ 16 مع تفاصيل إضافية
+const RUMAL_FORMS = [
+  { 
+    name: "الحمل", 
+    pattern: [1, 1, 1, 1], 
+    meaning: "بداية جديدة، قوة، طموح",
+    element: "ناري",
+    planet: "المريخ",
+    house: "البيت الأول: شخصية الفرد وأفعاله",
+    message: "الوقت مناسب لبدء مشاريع جديدة، أظهر الشجاعة وواجه التحديات، اعتمد على طاقتك الداخلية لتحقيق الأهداف"
+  },
+  // ... (بقية الأشكال)
+];
+
+// تعريف المنازل الـ 12
+const HOUSES = [
+  { number: 1, name: "الذات", element: "ناري", meaning: "الشخصية، المظهر، البدايات" },
+  // ... (بقية المنازل)
+];
+
+// تعريف المنازل القمرية الـ 28
+const MOON_MANSIONS = [
+  { name: "الشرطان", letter: "أ", angle: 0, meaning: "بداية المشاريع الجديدة" },
+  // ... (بقية المنازل القمرية)
+];
+
+let DATA = {
+  figs: JSON.parse(JSON.stringify(DEFAULT_FIGS)),
+  interpZ: '',
+  interpI: '',
+  parityMode: 'odd0',
+  pawnTheme: 'grain',
+  transcript: '',
+  squareMessages: {}
+};
+
+/* ---------- متغيرات التكبير ---------- */
+let zoomLevel = 1;
+const MAX_ZOOM = 2;
+const MIN_ZOOM = 0.7;
+const ZOOM_STEP = 0.1;
+
+/* ---------- أدوات صغيرة ---------- */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+function saveLocal(){ localStorage.setItem('raml_chess_v1', JSON.stringify(DATA)); }
+function loadLocal(){ const j = localStorage.getItem('raml_chess_v1'); if(j) DATA=JSON.parse(j); }
+
+// حساب القيمة العددية (أبجد)
+function calculateAbjad(word) {
+  const abjadMap = {
+    'ا': 1, 'أ': 1, 'إ': 1, 'آ': 1, 'ء': 1,
+    'ب': 2, 'ج': 3, 'د': 4, 'ه': 5, 'و': 6, 'ز': 7, 'ح': 8, 'ط': 9,
+    'ي': 10, 'ى': 10, 'ك': 20, 'ل': 30, 'м': 40, 'ن': 50,
+    'س': 60, 'ع': 70, 'ف': 80, 'ص': 90, 'ق': 100, 'ر': 200,
+    'ش': 300, 'ت': 400, 'ث': 500, 'خ': 600, 'ذ': 700, 'ض': 800,
+    'ظ': 900, 'غ': 1000
+  };
+  
+  let sum = 0;
+  for (let i = 0; i < word.length; i++) {
+    sum += abjadMap[word[i]] || 0;
+  }
+  return sum;
+}
+
+// تقليل القيمة إلى رقم واحد
+function reduceToSingleDigit(num) {
+  while (num > 9) {
+    num = num.toString().split('').reduce((sum, digit) => sum + parseInt(digit), 0);
+  }
+  return num;
+}
+
+// توليد كلمة سرية عشوائية
+function generateSecretWord(rank, file) {
+  const names = ["الرحمن", "الرحيم", "الملك", "القدوس", "السلام", "المؤمن", "المهيمن", "العزيز"];
+  const actions = ["يبدأ", "يحقق", "يحفظ", "يرزق", "يهدي", "ينصر", "يوفق", "يحفظ"];
+  const objects = ["الخير", "النجاح", "البركة", "الرزق", "الهداية", "النصر", "التوفيق", "الحفظ"];
+  
+  const nameIndex = (rank + file) % names.length;
+  const actionIndex = (rank * file) % actions.length;
+  const objectIndex = (rank + file * 2) % objects.length;
+  
+  return `${names[nameIndex]} ${actions[actionIndex]} ${objects[objectIndex]}`;
+}
+
+// تحليل الكلمة باستخدام شجرة الرحمن الرحيم
+function analyzeWordWithRahmanTree(word) {
+  const abjadValue = calculateAbjad(word);
+  const reducedValue = reduceToSingleDigit(abjadValue);
+  
+  // تحديد الشكل الرملي المرتبط
+  const associatedForm = RUMAL_FORMS.find(form => {
+    const formValue = calculateAbjad(form.name);
+    return formValue % 9 === reducedValue;
+  });
+  
+  // تحديد الاسم الحسن المرتبط
+  const associatedName = DIVINE_NAMES.find(name => {
+    return name.abjad % 9 === reducedValue;
+  });
+  
+  // تحديد السورة المرتبطة
+  const associatedSurah = QURAN_SURAH.find(surah => {
+    return surah.number % 9 === reducedValue;
+  });
+  
+  // توليد الرسالة السرية
+  const secretMessage = generateSecretMessage(word, associatedForm, associatedName, associatedSurah);
+  
+  return {
+    abjad: abjadValue,
+    reducedValue: reducedValue,
+    associatedForm: associatedForm,
+    associatedName: associatedName,
+    associatedSurah: associatedSurah,
+    secretMessage: secretMessage
+  };
+}
+
+// توليد الرسالة السرية
+function generateSecretMessage(word, form, name, surah) {
+  if (!form || !name || !surah) return "الكلمة تحمل سراً يحتاج إلى تأمل أعمق";
+  
+  const messages = [
+    `يا ${word}، اعلم أن ${name.name} قد جعل فيك سر ${form.name}، فاستعن بسورة ${surah.name} لتصل إلى الحكمة المطلوبة`,
+    `في كلمة "${word}" يكمن سر ${form.meaning}، و ${name.name} يرشدك إلى أن ${form.message}، فتلوّ ${surah.name} لتتقوى`,
+    `إذا قرأت سورة ${surah.name} مع التأمل في معنى ${form.name}، ستجد أن ${name.name} قد جعل في قلبك سر ${word} الذي يحمل لك رسالة: ${form.message}`,
+    `السر: ${word} تشير إلى أن ${name.name} قد جعل فيك طاقة ${form.name}، فاستعن بسورة ${surah.name} لتحقيق ${form.message}`,
+    `في قلب كلمة "${word}" يكمن سر ${form.name}، و ${name.name} يرشدك إلى أن ${form.message}، فتلوّ سورة ${surah.name} لتتقوى`
+  ];
+  
+  return messages[Math.floor(Math.random() * messages.length)];
+}
+
+// ملء البلاطات الفارغة بشجرة الرحمن
+function fillEmptySquaresWithRahmanTree() {
+  // البحث عن البلاطات الفارغة (الصفوف 3-6)
+  const emptySquares = [];
+  for (let r = 3; r <= 6; r++) {
+    for (let f = 0; f < 8; f++) {
+      emptySquares.push({rank: r, file: f});
+    }
+  }
+  
+  // ملء كل بلاطة فارغة برسالة سرية
+  emptySquares.forEach(square => {
+    const {rank, file} = square;
+    const sqId = `${FILES[file]}${rank}`;
+    const word = generateSecretWord(rank, file); // توليد كلمة سرية
+    const analysis = analyzeWordWithRahmanTree(word);
+    
+    // حفظ التحليل في البيانات
+    const squareData = {
+      word: word,
+      analysis: analysis,
+      timestamp: new Date().toISOString()
+    };
+    
+    // تخزين البيانات
+    if (!DATA.squareMessages) DATA.squareMessages = {};
+    DATA.squareMessages[sqId] = squareData;
+  });
+  
+  logInfo(`تم ملء ${emptySquares.length} بلاطة فارغة باستخدام شجرة الرحمن`);
+  saveLocal();
+  renderBoard();
+}
+
+// تحليل جميع الكلمات في الرقعة
+function analyzeAllWords() {
+  let analysisResult = "";
+  
+  for (let r = 3; r <= 6; r++) {
+    for (let f = 0; f < 8; f++) {
+      const sqId = `${FILES[f]}${r}`;
+      if (DATA.squareMessages && DATA.squareMessages[sqId]) {
+        const analysis = DATA.squareMessages[sqId].analysis;
+        analysisResult += `<div style="margin-bottom:10px;padding:8px;background:#0a1c2a;border-radius:6px">
+          <div><b>${sqId}: ${DATA.squareMessages[sqId].word}</b></div>
+          <div class="small">القيمة العددية: ${analysis.abjad}</div>
+          <div class="small">الرسالة السرية: <i>${analysis.secretMessage}</i></div>
+        </div>`;
+      }
+    }
+  }
+  
+  if (!analysisResult) {
+    analysisResult = "<div class='small'>لم يتم تحليل أي كلمات بعد. اضغط على 'ملء الفراغات بشجرة الرحمن' أولاً.</div>";
+  }
+  
+  // عرض النتائج في نافذة منبثقة
+  const modal = $('#modal'); 
+  const body = $('#modalBody'); 
+  $('#modalTitle').textContent = "تحليل جميع الكلمات";
+  body.innerHTML = analysisResult;
+  $('#modalBack').style.display='flex';
+}
+
+// وظائف التكبير والتصغير
+function updateZoom() {
+  document.documentElement.style.setProperty('--zoom-level', zoomLevel);
+  $('#zoomLevel').textContent = `${Math.round(zoomLevel * 100)}%`;
+  renderBoard(); // إعادة عرض الرقعة للتأكد من أن التكبير يعمل بشكل صحيح
+}
+
+function zoomIn() {
+  if (zoomLevel < MAX_ZOOM) {
+    zoomLevel += ZOOM_STEP;
+    updateZoom();
+  }
+}
+
+function zoomOut() {
+  if (zoomLevel > MIN_ZOOM) {
+    zoomLevel -= ZOOM_STEP;
+    updateZoom();
+  }
+}
+
+// عرض بلاطة المعلومات
+function showInfoTile(title, content) {
+  $('#tileTitle').textContent = title;
+  $('#tileContent').innerHTML = content;
+  $('#infoTile').style.display = 'block';
+}
+
+function hideInfoTile() {
+  $('#infoTile').style.display = 'none';
+}
+
+/* ---------- تبويبات ---------- */
+$$('.tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    $$('.tab').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    const pane = t.dataset.tab;
+    $$('.tabpane').forEach(p=> p.style.display = (p.dataset.pane===pane?'block':'none'));
+  });
+});
+
+/* ---------- parity (0=فرد,1=زوج) ---------- */
+$('#parityMode').value = DATA.parityMode;
+$('#parityMode').addEventListener('change', ()=> { DATA.parityMode = $('#parityMode').value; saveLocal(); renderPad(); });
+function parityDisplay(bit){
+  // mode odd0: 0 -> فرد (•) ; 1 -> زوج (••)
+  const mode = $('#parityMode').value;
+  if(mode==='odd0') return bit==='0' ? '•' : '••';
+  return bit==='1' ? '•' : '••';
+}
+function toCanonical(bits){ // canon: 1 = فرد, 0 = زوج
+  const mode = $('#parityMode').value;
+  if(mode==='odd0') return bits.split('').map(b=> b==='0' ? '1' : '0').join('');
+  return bits;
+}
+function badgeFromCanonical(bits){
+  return bits.split('').map(b=> b==='1'?'•':'••').join(' ');
+}
+function renderRumalPattern(bits) {
+  // تحويل البتات إلى نمط الرمل (نقط)
+  const pattern = bits.split('').map(b => b === '1' ? 1 : 2);
+  return pattern.map(dots => {
+    return `<div class="rumal-pattern">${Array(dots).fill(0).map(() => 
+      `<span class="rumal-dot ${dots === 2 ? 'double' : ''}"></span>`).join('')}</div>`;
+  }).join('');
+}
+
+/* ---------- إدخال الأمهات ---------- */
+let moms = []; // stored canonical (1=فرد)
+function renderMoms(){
+  const wrap = $('#momsRow'); wrap.innerHTML='';
+  moms.forEach((m,i)=>{
+    const el = document.createElement('div'); el.className='piece';
+    el.style.margin='4px'; el.style.padding='6px';
+    el.innerHTML = `<div style="font-weight:800">${badgeFromCanonical(m)}</div><div class="small">أم ${i+1} — <code>${m}</code></div>`;
+    el.onclick = ()=>{ if(confirm('حذف أم؟')) { moms.splice(i,1); renderMoms(); } };
+    wrap.appendChild(el);
+  });
+}
+$('#addFromInput').addEventListener('click', ()=>{
+  const v = ($('#quickBits').value||'').trim();
+  if(!/^[01]{4}$/.test(v)){ alert('أدخل 4 خانات 0/1'); return; }
+  moms.push( toCanonical(v) ); renderMoms();
+});
+$('#randomMoms').addEventListener('click', ()=>{
+  while(moms.length < 4) moms.push( toCanonical(Array.from({length:4},()=>Math.random()>0.5?'1':'0').join('')) );
+  renderMoms();
+});
+$('#resetMoms').addEventListener('click', ()=> { if(confirm('تفريغ الأمهات؟')) { moms=[]; renderMoms(); $('#resRow').innerHTML=''; SIXTEEN=[]; renderBoard(); } });
+
+/* ---------- بناء الـ16 ---------- */
+function xor(a,b){ return (Number(a)^Number(b)).toString(); }
+function col(arr,i){ return arr.map(x=> x[i]).join(''); }
+function build16(momsArr){
+  if(momsArr.length !== 4) throw new Error('يلزم أربعة أمهات.');
+  const M = momsArr; // strings canonical (1=فرد)
+  const D = [0,1,2,3].map(i=> col(M,i)); // البنات
+  const N1 = M[0].split('').map((_,r)=> xor(M[0][r], M[1][r])).join('');
+  const N2 = M[2].split('').map((_,r)=> xor(M[2][r], M[3][r])).join('');
+  const N3 = D[0].split('').map((_,r)=> xor(D[0][r], D[1][r])).join('');
+  const N4 = D[2].split('').map((_,r)=> xor(D[2][r], D[3][r])).join('');
+  const W1 = N1, W2 = N2;
+  const J  = W1.split('').map((_,r)=> xor(W1[r], W2[r])).join('');
+  const all = [...M, ...D, N1, N2, N3, N4, W1, W2, J].slice(0,16);
+  return all;
+}
+let SIXTEEN = [];
+$('#build16').addEventListener('click', ()=>{
+  try{
+    SIXTEEN = build16(moms);
+    renderSixteen();
+    renderBoard();
+    logInfo('تم توليد الـ16 شكل.');
+  }catch(e){ alert(e.message); }
+});
+function renderSixteen(){
+  const wrap = $('#resRow'); wrap.innerHTML='';
+  SIXTEEN.forEach((b,i)=>{
+    const f = figByBits(b) || ['????','غير معروف','?','?','?','?','?','?'];
+    const el = document.createElement('div'); el.className='piece'; el.style.margin='4px';
+    el.innerHTML = `<div style="font-weight:800">${badgeFromCanonical(b)}</div><div class="small">#${i+1} — <b>${f[1]}</b> <code>${b}</code></div>`;
+    wrap.appendChild(el);
+  });
+}
+
+/* ---------- القاموس والبيوت ---------- */
+function figByBits(bits){
+  return DATA.figs.find(f=> f[0]===bits);
+}
+function findRumalFormByBits(bits) {
+  // محاولة العثور على شكل الرمل المطابق
+  const pattern = bits.split('').map(b => b === '1' ? 1 : 2);
+  return RUMAL_FORMS.find(form => {
+    for (let i = 0; i < 4; i++) {
+      if (form.pattern[i] !== pattern[i]) return false;
+    }
+    return true;
+  });
+}
+function renderFigTable(){
+  const wrap = $('#figTableWrap'); wrap.innerHTML='';
+  const tbl = document.createElement('table'); tbl.className='table';
+  const hdr = document.createElement('tr'); hdr.innerHTML = '<th>#</th><th>bits</th><th>الاسم العربي</th><th>لاتيني</th><th>العنصر</th><th>الكوكب</th><th>البرج</th><th>طبيعة</th><th>ملاحظة</th>';
+  tbl.appendChild(hdr);
+  DATA.figs.forEach((f,i)=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${i+1}</td>` + f.map((c,j)=> `<td contenteditable data-i="${i}" data-j="${j}">${c}</td>`).join('');
+    tbl.appendChild(tr);
+  });
+  wrap.appendChild(tbl);
+  tbl.querySelectorAll('[contenteditable]').forEach(td=>{
+    td.addEventListener('blur', ()=> {
+      const i = +td.dataset.i, j = +td.dataset.j; DATA.figs[i][j] = td.textContent.trim(); saveLocal();
+      renderSixteen(); renderBoard();
+    });
+  });
+  saveLocal();
+}
+function renderHouses(){
+  // بسيط: المنزل 1..12 = أول 12 من SIXTEEN إن وجدت
+  const wrap = $('#houseTableWrap'); wrap.innerHTML='';
+  const tbl = document.createElement('table'); tbl.className='table';
+  const hdr = document.createElement('tr'); hdr.innerHTML = '<th>بيت</th><th>شكل</th><th>الاسم</th><th>العنصر</th><th>الرسالة</th>';
+  tbl.appendChild(hdr);
+  for(let i=0;i<12;i++){
+    const bits = SIXTEEN[i] || '';
+    const f = bits ? (figByBits(bits) || ['','','','','','','','']) : ['', 'فارغ','---','','','','',''];
+    const rumalForm = bits ? findRumalFormByBits(bits) : null;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${i+1}</td><td>${bits?badgeFromCanonical(bits):'—'}</td><td>${f[1]||'—'}</td><td>${f[3]||'—'}</td><td contenteditable data-house="${i}">${rumalForm ? rumalForm.message : '—'}</td>`;
+    tbl.appendChild(tr);
+  }
+  wrap.appendChild(tbl);
+  tbl.querySelectorAll('[contenteditable]').forEach(td=>{
+    td.addEventListener('blur', ()=> saveLocal());
+  });
+}
+
+// عرض جدول الأسماء الحسنى
+function renderDivineNamesTable() {
+  const wrap = $('#divineNamesTable');
+  wrap.innerHTML = `
+    <table class="table">
+      <tr>
+        <th>الرقم</th>
+        <th>الاسم</th>
+        <th>القيمة العددية</th>
+        <th>الدلالة</th>
+        <th>الشكل المرتبط</th>
+        <th>البيت</th>
+      </tr>
+      ${DIVINE_NAMES.map((name, i) => `
+        <tr>
+          <td>${i+1}</td>
+          <td>${name.name}</td>
+          <td>${name.abjad}</td>
+          <td>${name.meaning}</td>
+          <td>${name.associatedForms.join(", ")}</td>
+          <td>البيت ${name.associatedHouse}</td>
+        </tr>
+      `).join('')}
+    </table>
+  `;
+}
+
+/* ---------- الرقعة ---------- */
+const FILES = ['a','b','c','d','e','f','g','h'];
+const whiteBack = ['رخ','حصان','فيل','وزير','ملك','فيل','حصان','رخ'];
+const blackBack = [...whiteBack];
+function pawnLabel(fileIndex, isWhite){
+  if($('#pawnTheme').value === 'grain'){
+    const val = 1 << fileIndex;
+    return `🌾 ${val}`;
+  }
+  const bits = ('00000000' + (1<<fileIndex).toString(2)).slice(-8);
+  return `⚛️ ${bits}`;
+}
+function initialPieceAt(rank,file){
+  if(rank===2) return {side:'أبيض',piece:'جندي',label:pawnLabel(file,true)};
+  if(rank===7) return {side:'أسود',piece:'جندي',label:pawnLabel(file,false)};
+  if(rank===1) return {side:'أبيض',piece:whiteBack[file]};
+  if(rank===8) return {side:'أسود',piece:blackBack[file]};
+  return null;
+}
+function logInfo(txt){
+  const log = $('#infoLog'); const d = document.createElement('div'); d.textContent = `${(new Date()).toLocaleTimeString()} — ${txt}`; log.prepend(d);
+}
+function speak(txt){
+  if(!$('#ttsToggle').checked) return;
+  try{ const u = new SpeechSynthesisUtterance(txt); u.lang='ar-SA'; speechSynthesis.speak(u);}catch(e){}
+}
+
+/* لوحة الرمز */
+function renderBoard(){
+  const board = $('#board'); board.innerHTML='';
+  for(let r=8;r>=1;r--){
+    for(let f=0; f<8; f++){
+      const sq = document.createElement('div'); 
+      sq.className = 'sq ' + (((r+f)%2===0)?'light':'dark');
+      sq.dataset.rank = r;
+      sq.dataset.file = f;
+      const piece = initialPieceAt(r,f);
+      const sqId = `${FILES[f]}${r}`;
+      
+      // تحديد ما إذا كانت هذه البلاطة تحتوي على رسالة من شجرة الرحمن
+      const hasRumalMessage = DATA.squareMessages && DATA.squareMessages[sqId];
+      
+      // إضافة فئة خاصة إذا كانت تحتوي على رسالة
+      if (hasRumalMessage) {
+        sq.classList.add('rumal-message');
+      }
+      
+      if((r===1||r===8) && piece){ // حاشية — نعرض شكل إذا وُجد في SIXTEEN
+        const idx = (r===1?0:8) + f;
+        const bits = SIXTEEN[idx];
+        if(bits){
+          const meta = figByBits(bits) || ['','','','','','','',''];
+          const rumalForm = findRumalFormByBits(bits);
+          sq.innerHTML = `<div class="piece" data-bits="${bits}" data-rank="${r}" data-file="${f}">
+            <div style="font-weight:800">${badgeFromCanonical(bits)}</div>
+            <div class="small">${meta[1] || '—'}</div>
+            ${rumalForm ? `<div class="small" style="color:#a78bfa">${rumalForm.name}</div>` : ''}
+          </div>`;
+        } else {
+          sq.innerHTML = `<div class="piece" data-rank="${r}" data-file="${f}"><div class="small">فارغ</div></div>`;
+        }
+      } else if(piece && piece.piece==='جندي'){
+        sq.innerHTML = `<div class="piece" data-pawn="1" data-side="${piece.side}" data-rank="${r}" data-file="${f}">
+          <div>${piece.label}</div>
+          <div class="small">${piece.side} — جندي</div>
+        </div>`;
+      } else {
+        // إذا كانت البلاطة تحتوي على رسالة، عرضها
+        if (hasRumalMessage) {
+          const msg = DATA.squareMessages[sqId];
+          sq.innerHTML = `
+            <div class="piece" data-rumal-message="${sqId}" style="background:linear-gradient(135deg,#0d2538,#0a1c2a);">
+              <div style="font-weight:800;font-size:14px;color:#a78bfa">شجرة الرحمن</div>
+              <div class="small" style="color:#e6eef6;white-space:normal;text-align:center">${msg.word}</div>
+            </div>
+          `;
+        } else {
+          sq.innerHTML = '';
+        }
+      }
+      // تفاعل: نقرة واحدة + نقرة مزدوجة
+      let clickTimer = null;
+      sq.addEventListener('click', (ev)=>{
+        if(clickTimer==null){
+          clickTimer = setTimeout(()=>{ clickTimer=null; onSquareClick(r,f); }, 250);
+        }
+      });
+      sq.addEventListener('dblclick', (ev)=>{
+        if(clickTimer){ clearTimeout(clickTimer); clickTimer=null; }
+        onSquareDoubleClick(r,f);
+      });
+      board.appendChild(sq);
+    }
+  }
+}
+
+/* النقر: عرض موجز */
+function onSquareClick(rank,file){
+  const sqId = `${FILES[file]}${rank}`;
+  const piece = initialPieceAt(rank,file);
+  if(rank===1||rank===8){
+    const idx = (rank===1?0:8) + file; const bits = SIXTEEN[idx];
+    if(!bits){ $('#squareInfo').innerHTML = `الخانة ${sqId} — لا يوجد شكل مثبت هنا.`; return; }
+    const meta = figByBits(bits) || ['','','','','','','',''];
+    const rumalForm = findRumalFormByBits(bits);
+    $('#squareInfo').innerHTML = `<div><b>الخانة:</b> ${sqId} — حاشية</div><div><b>الشكل:</b> ${badgeFromCanonical(bits)} <code>${bits}</code></div><div><b>الاسم:</b> ${meta[1] || '—'}</div><div class="small"><b>عنصر/كوكب:</b> ${meta[3]||'—'} / ${meta[4]||'—'}</div>`;
+    if (rumalForm) {
+      $('#squareInfo').innerHTML += `<div class="small"><b>شكل الرمل:</b> ${rumalForm.name} (${rumalForm.element})</div>`;
+    }
+    logInfo(`حاشية ${sqId}: ${meta[1] || 'شكل غير معروف'}`);
+    speak(`في الخانة ${sqId} شكل ${meta[1] || 'مجهول'}.`);
+  } else if(piece && piece.piece==='جندي'){
+    $('#squareInfo').innerHTML = `<div><b>الخانة:</b> ${sqId} — جندي (${piece.side})</div><div>${piece.label}</div>`;
+    logInfo(`جندي ${sqId}: ${piece.label}`);
+    speak(`الجندي في ${sqId}: ${piece.label}`);
+  } else {
+    // إذا كانت البلاطة تحتوي على رسالة من شجرة الرحمن
+    if (DATA.squareMessages && DATA.squareMessages[sqId]) {
+      const msg = DATA.squareMessages[sqId];
+      // عرض بلاطة المعلومات بدلاً من المعلومات البسيطة
+      showInfoTile(
+        `رسالة شجرة الرحمن - ${sqId}`,
+        `
+          <div style="margin-bottom:12px"><b>الكلمة:</b> ${msg.word}</div>
+          <div style="margin-bottom:12px"><b>القيمة العددية:</b> ${msg.analysis.abjad}</div>
+          <div style="margin-bottom:12px"><b>القيمة المخفضة:</b> ${msg.analysis.reducedValue}</div>
+          <div style="margin-bottom:12px"><b>الرسالة السرية:</b></div>
+          <div style="background:#0a1c2a;padding:10px;border-radius:8px;margin-bottom:12px">
+            ${msg.analysis.secretMessage}
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <button class="btn" id="speakMessage">قراءة الرسالة</button>
+            <button class="btn" id="analyzeDeeper">تحليل أعمق</button>
+          </div>
+        `
+      );
+      
+      // إضافة معالج الأحداث للزر الجديد
+      setTimeout(() => {
+        $('#speakMessage').addEventListener('click', () => {
+          speak(msg.analysis.secretMessage);
+        });
+        
+        $('#analyzeDeeper').addEventListener('click', () => {
+          const deeperAnalysis = `
+            <div style="margin-bottom:12px"><b>تحليل متقدم للكلمة:</b> ${msg.word}</div>
+            <div style="margin-bottom:8px"><b>الاسم الإلهي المرتبط:</b> ${msg.analysis.associatedName?.name || 'غير معروف'}</div>
+            <div style="margin-bottom:8px"><b>شكل الرمل المرتبط:</b> ${msg.analysis.associatedForm?.name || 'غير معروف'}</div>
+            <div style="margin-bottom:8px"><b>السورة القرآنية المرتبطة:</b> ${msg.analysis.associatedSurah?.name || 'غير معروف'}</div>
+            <div style="margin-bottom:12px"><b>تفسير إضافي:</b></div>
+            <div style="background:#0a1c2a;padding:10px;border-radius:8px">
+              هذه الكلمة تحمل في طياتها أسراراً كونية مرتبطة بالاسم الإلهي ${msg.analysis.associatedName?.name || ''} 
+              وشكل الرمل ${msg.analysis.associatedForm?.name || ''}. يمكن استخدام هذه الطاقة في تحقيق الأهداف 
+              والوصول إلى مراتب أعلى من الفهم والوعي.
+            </div>
+          `;
+          $('#tileContent').innerHTML = deeperAnalysis;
+        });
+      }, 100);
+    } else {
+      $('#squareInfo').innerHTML = `<div><b>الخانة:</b> ${sqId} — ساحة التشجير (فارغة)</div><div class="small">انقر مرتين لإنشاء رسالة جديدة.</div>`;
+      logInfo(`الساحة ${sqId} — فارغة.`);
+    }
+  }
+}
+
+/* النقر المزدوج: فتح modal مُفصل */
+function onSquareDoubleClick(rank,file){
+  const sqId = `${FILES[file]}${rank}`;
+  const piece = initialPieceAt(rank,file);
+  
+  // إذا كانت خانة فارغة في الصفوف 3-6، إنشاء رسالة جديدة
+  if ((rank >= 3 && rank <= 6) && (!DATA.squareMessages || !DATA.squareMessages[sqId])) {
+    const word = generateSecretWord(rank, file);
+    const analysis = analyzeWordWithRahmanTree(word);
+    
+    if (!DATA.squareMessages) DATA.squareMessages = {};
+    DATA.squareMessages[sqId] = {
+      word: word,
+      analysis: analysis,
+      timestamp: new Date().toISOString()
+    };
+    
+    saveLocal();
+    renderBoard();
+    
+    showInfoTile(
+      `رسالة جديدة - ${sqId}`,
+      `
+        <div style="margin-bottom:12px"><b>تم إنشاء رسالة جديدة:</b> ${word}</div>
+        <div style="margin-bottom:12px"><b>القيمة العددية:</b> ${analysis.abjad}</div>
+        <div style="margin-bottom:12px"><b>الرسالة السرية:</b></div>
+        <div style="background:#0a1c2a;padding:10px;border-radius:8px">
+          ${analysis.secretMessage}
+        </div>
+      `
+    );
+    
+    return;
+  }
+  
+  const modal = $('#modal'); 
+  const body = $('#modalBody'); 
+  $('#modalTitle').textContent = `شرح مفصّل — ${sqId}`;
+  body.innerHTML = '';
+  
+  if(rank===1||rank===8){
+    const idx = (rank===1?0:8) + file; const bits = SIXTEEN[idx];
+    if(!bits){ 
+      body.innerHTML = `<div class="small">لا يوجد شكل مثبت هنا. أدخل 4 خانات في الحقل أعلاه ثم اضغط هنا لتثبيت.</div>`;
+      $('#modalBack').style.display='flex'; 
+      return; 
+    }
+    const meta = figByBits(bits) || ['','','','','','','',''];
+    const rumalForm = findRumalFormByBits(bits);
+    const mansionIndex = idx % 28;
+    const mansion = MOON_MANSIONS[mansionIndex];
+    // عرض مُفصّل:
+    body.innerHTML = `
+      <div style="display:flex;gap:8px;align-items:center">
+        <div style="font-weight:900;font-size:20px">${badgeFromCanonical(bits)}</div>
+        <div>
+          <div><b>الاسم:</b> ${meta[1] || '—'} (${meta[2] || '—'})</div>
+          <div><b>bits:</b> <code>${bits}</code></div>
+          <div><b>العنصر / الكوكب:</b> ${meta[3]||'—'} / ${meta[4]||'—'}</div>
+          <div><b>الطبيعة:</b> ${meta[6]||'—'}</div>
+        </div>
+      </div>
+      <div style="margin-top:10px">
+        ${renderRumalPattern(bits)}
+      </div>
+      ${rumalForm ? `
+      <hr style="border:none;border-top:1px solid rgba(255,255,255,0.03);margin:8px 0">
+      <div style="font-weight:700;color:#a78bfa">${rumalForm.name} — شكل الرمل</div>
+      <div class="small"><b>الدلالة:</b> ${rumalForm.meaning}</div>
+      <div class="small"><b>العنصر:</b> ${rumalForm.element}</div>
+      <div class="small"><b>البيت:</b> ${rumalForm.house}</div>
+      <div class="small"><b>الرسالة:</b> ${rumalForm.message}</div>
+      ` : ''}
+      <hr style="border:none;border-top:1px solid rgba(255,255,255,0.03);margin:8px 0">
+      <div class="small"><b>المنزلة القمرية:</b> ${mansion.name} (${mansion.letter})</div>
+      <div class="small"><b>الدلالة:</b> ${mansion.meaning}</div>
+      <div style="margin-top:10px" class="small"><b>تفسير عام (مجمّع من مصادر الرمل):</b><br>${meta[7] || 'لا تفسير مبدئي.'}</div>
+      <div style="margin-top:10px" class="small"><b>رؤى (زناتي / إدريس) — مُعدّلة:</b><br>يمكنك تحرير نصوص الرؤى الخاصة بك في نافذة الجداول لارتباط أفكارك بالبيت والشكل.</div>
+      <div style="margin-top:10px" class="small"><b>ملاحظات من سلسلة 'طاووس' (ملخّص):</b><br>الأداة تضع هنا ملخصًا عامًا عن ربط الشكل بالبيت والعناصر — ويمكنك لصق اقتباساتك الحرفية في حقل 'Transcript' في تبويب 'حول'.</div>
+      <div style="margin-top:10px">
+        <button id="ttsModal" class="btn">قراءة الشرح</button>
+        <button id="linkMove" class="btn">ربط بنقلة من آخر تحليل PGN</button>
+      </div>
+      <hr style="border:none;border-top:1px solid rgba(255,255,255,0.03);margin:8px 0">
+      <div class="small"><b>نصوص ومراجع:</b><div id="modalRefs">${(DATA.transcript||'') ? DATA.transcript : '<i>لم تُضمّن اقتباسات حرفية بعد.</i>'}</div></div>
+    `;
+    $('#modalBack').style.display='flex';
+    $('#ttsModal').addEventListener('click', ()=> speak(`شرح الشكل ${meta[1]||'غير معروف'}: ${meta[7]||'لا تفسير.'}`));
+    $('#linkMove').addEventListener('click', ()=> {
+      if(window._lastPGNMatch){ alert('مربوط بنقلة: ' + window._lastPGNMatch.san + ' → ' + window._lastPGNMatch.bits); }
+      else alert('لا توجد نقلة محللة حديثًا لربطها.');
+    });
+  } else if(piece && piece.piece==='جندي'){
+    body.innerHTML = `<div class="small"><b>جندي ${piece.side} في ${sqId}</b><br>قيمة/رمز: ${piece.label}<br>يمكن ربط هذا الجندي بمخرجات تشجير ليعطي رسالة عند التحليل.</div>`;
+    $('#modalBack').style.display='flex';
+  } else {
+    // إذا كانت البلاطة تحتوي على رسالة من شجرة الرحمن
+    if (DATA.squareMessages && DATA.squareMessages[sqId]) {
+      const msg = DATA.squareMessages[sqId];
+      body.innerHTML = `
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="background:#0a1c2a;padding:10px;border-radius:8px">
+            <div style="font-weight:700;color:#a78bfa;margin-bottom:5px">الكلمة السرية</div>
+            <div style="font-size:18px;font-weight:800;text-align:center">${msg.word}</div>
+            <div class="small" style="text-align:center;margin-top:5px">القيمة العددية: ${msg.analysis.abjad}</div>
+          </div>
+          
+          ${msg.analysis.associatedName ? `
+          <div style="background:#0a1c2a;padding:10px;border-radius:8px">
+            <div style="font-weight:700;color:#a78bfa;margin-bottom:5px">الاسم الحسن المرتبط</div>
+            <div style="font-size:16px;font-weight:700;text-align:center">${msg.analysis.associatedName.name}</div>
+            <div class="small" style="text-align:center">${msg.analysis.associatedName.meaning}</div>
+            <div class="small" style="text-align:center;margin-top:5px">القيمة العددية: ${msg.analysis.associatedName.abjad}</div>
+          </div>
+          ` : ''}
+          
+          ${msg.analysis.associatedForm ? `
+          <div style="background:#0a1c2a;padding:10px;border-radius:8px">
+            <div style="font-weight:700;color:#a78bfa;margin-bottom:5px">شكل الرمل المرتبط</div>
+            <div style="font-size:16px;font-weight:700;text-align:center">${msg.analysis.associatedForm.name}</div>
+            <div class="small" style="text-align:center">${msg.analysis.associatedForm.meaning}</div>
+            <div class="small" style="text-align:center;margin-top:5px">البيت: ${msg.analysis.associatedForm.house}</div>
+          </div>
+          ` : ''}
+          
+          ${msg.analysis.associatedSurah ? `
+          <div style="background:#0a1c2a;padding:10px;border-radius:8px">
+            <div style="font-weight:700;color:#a78bfa;margin-bottom:5px">السورة المرتبطة</div>
+            <div style="font-size:16px;font-weight:700;text-align:center">سورة ${msg.analysis.associatedSurah.name}</div>
+            <div class="small" style="text-align:center">الرقم: ${msg.analysis.associatedSurah.number} - الآيات: ${msg.analysis.associatedSurah.verses}</div>
+            <div class="small" style="text-align:center;margin-top:5px">الدلالة الرملية: ${msg.analysis.associatedSurah.geomanticSignificance}</div>
+          </div>
+          ` : ''}
+          
+          <div style="background:#0d2538;padding:15px;border-radius:10px;margin-top:10px">
+            <div style="font-weight:700;color:#a78bfa;margin-bottom:8px">الرسالة السرية</div>
+            <div style="font-style:italic;line-height:1.6;color:#e6eef6">${msg.analysis.secretMessage}</div>
+          </div>
+          
+          <div style="margin-top:15px">
+            <button id="ttsMessage" class="btn" style="width:100%">قراءة الرسالة السرية</button>
+          </div>
+        </div>
+      `;
+    } else {
+      body.innerHTML = `<div class="small"><b>ساحة التشجير — ${sqId}</b><br>مكان لإجراء عمليات تركيبية بين الجنود والحاشية. يمكن هنا كتابة نصوص تفسيرية أو لصق نتائج التحليل.</div>`;
+    }
+    $('#modalBack').style.display='flex';
+    
+    // إضافة تفاعل لقراءة الرسالة السرية
+    const ttsBtn = $('#ttsMessage');
+    if (ttsBtn) {
+      ttsBtn.addEventListener('click', () => {
+        if (DATA.squareMessages && DATA.squareMessages[sqId]) {
+          speak(DATA.squareMessages[sqId].analysis.secretMessage);
+        }
+      });
+    }
+  }
+}
+
+/* اغلاق modal */
+$('#modalClose').addEventListener('click', ()=> $('#modalBack').style.display='none');
+$('#modalBack').addEventListener('click', (e)=>{ if(e.target.id==='modalBack') $('#modalBack').style.display='none'; });
+
+/* اغلاق بلاطة المعلومات */
+$('#closeTile').addEventListener('click', hideInfoTile);
+
+/* ---------- PGN parsing & mapping ---------- */
+function parsePGN(txt){
+  let s = txt.replace(/\{[^}]*\}/g,'').replace(/\[[^\]]*\]/g,'').replace(/;.*$/gm,'').trim();
+  s = s.replace(/\d+\.\.\./g,'').trim();
+  const tokens = s.split(/\s+/).filter(Boolean);
+  return tokens;
+}
+function fileIndex(ch){ return 'abcdefgh'.indexOf(ch.toLowerCase()); }
+function rankToBit(r){ return (r%2)?'1':'0'; } // odd rank => 1 (فرد) in our canonical mapping
+function fileToBit(f){ return ((f+1)%2)?'1':'0'; }
+function sanToBits(san, idx){
+  // خوارزمية مبسطة تحويل SAN -> 4 بت canon
+  const sq = san.match(/([a-h][1-8])/);
+  let destFile=null, destRank=null; if(sq){ destFile = fileIndex(sq[1][0]); destRank = parseInt(sq[1][1],10); }
+  const capture = san.includes('x');
+  const pieceChar = san.match(/^[KQRBN]/) ? san[0] : 'P';
+  const bit1 = destRank ? rankToBit(destRank) : (idx%2?'1':'0');
+  const bit2 = destFile!=null ? fileToBit(destFile) : ((idx+1)%2?'1':'0');
+  const bit3 = capture ? '1' : '0';
+  const bit4 = (pieceChar==='P') ? '1' : '0';
+  const bitsCanon = bit1 + bit2 + bit3 + bit4; // canonical (1=فرد) as used above
+  return bitsCanon;
+}
+$('#btnSample').addEventListener('click', ()=> $('#pgnText').value = `1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. c3 O-O 9. h3 Nb8`);
+$('#filePGN').addEventListener('change', (e)=> {
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader(); r.onload = ()=> $('#pgnText').value = r.result;
+  r.readAsText(f);
+});
+$('#analyzePGN').addEventListener('click', ()=>{
+  const txt = $('#pgnText').value || ''; if(!txt.trim()){ alert('أدخل PGN'); return; }
+  const toks = parsePGN(txt);
+  const log = $('#pgnLog'); log.innerHTML='';
+  toks.forEach((san,i)=>{
+    const bits = sanToBits(san, i);
+    const name = figByBits(bits) ? figByBits(bits)[1] : 'شكل غير معروف';
+    const rumalForm = findRumalFormByBits(bits);
+    const badge = badgeFromCanonical(bits);
+    const side = (i%2===0)?'أبيض':'أسود';
+    const div = document.createElement('div'); div.className='small';
+    div.innerHTML = `<b>${i+1}. ${san}</b> → <code>${bits}</code> ${badge} — ${name} ${rumalForm ? `<span style="color:#a78bfa">(${rumalForm.name})</span>` : ''}`;
+    log.appendChild(div);
+    // store last match for linking
+    window._lastPGNMatch = {i, san, bits, name, side};
+    // speak short summary
+    speak(`نقلة ${i+1} ${side}: ${san}. رمز الرمل: ${name}.`);
+  });
+});
+
+/* ---------- حفظ واستيراد JSON ---------- */
+$('#exportBtn').addEventListener('click', ()=>{
+  saveLocal(); const blob = new Blob([JSON.stringify(DATA,null,2)],{type:'application/json'}); const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='raml_chess_export.json'; a.click(); URL.revokeObjectURL(url);
+});
+$('#importBtn').addEventListener('click', ()=> $('#jsonIn').click());
+$('#jsonIn').addEventListener('change', (e)=> {
+  const f = e.target.files[0]; if(!f) return; const r = new FileReader(); r.onload = ()=>{
+    try{ const obj = JSON.parse(r.result); if(obj.figs) DATA.figs = obj.figs; if(obj.transcript) DATA.transcript = obj.transcript; saveLocal(); renderFigTable(); renderBoard(); renderHouses(); alert('تم الاستيراد'); }
+    catch(err){ alert('ملف غير صالح'); }
+  }; r.readAsText(f);
+});
+
+/* حفظ النص المجلوب من الفيديو */
+$('#applyTranscript').addEventListener('click', ()=> {
+  DATA.transcript = $('#videoTranscript').value.trim(); saveLocal(); alert('تم حفظ النص (Transcript) داخل القاعدة. سيظهر في الشرح الموسع.');
+});
+
+/* ---------- التهيئة الأولية ---------- */
+loadLocal();
+$('#videoTranscript').value = DATA.transcript || '';
+renderFigTable();
+renderBoard();
+renderHouses();
+renderDivineNamesTable();
+
+/* ربط: عند حفظ SIXTEEN أو تحديث القاموس يجب إعادة العرض */
+function figByBits(bits){ return DATA.figs.find(f=> f[0]===bits); }
+
+/* ---------- توصيل إدخال سريع بالنقر على خانة الحاشية ---------- */
+$('#quickClear').addEventListener('click', ()=> $('#quickBits').value='');
+$('#board').addEventListener('click', (ev)=> {
+  // إذا كان هناك نص في quickBits ونقر المستخدم على خانة حاشية — ثبتها
+  const target = ev.target.closest('.sq');
+  if(!target) return;
+  const rank = parseInt(target.dataset.rank);
+  const file = parseInt(target.dataset.file);
+  // فقط إذا quickBits موجود و خانة حاشية:
+  const q = ($('#quickBits').value||'').trim();
+  if(/^[01]{4}$/.test(q) && (rank===1 || rank===8)){
+    const canon = toCanonical(q);
+    const slot = (rank===1?0:8) + file;
+    SIXTEEN[slot] = canon; saveLocal(); renderSixteen(); renderBoard(); logInfo(`ثبت الشكل ${canon} في ${FILES[file]}${rank}`); $('#quickBits').value=''; return;
+  }
+});
+
+// ربط أزرار وظائف الشجرة
+$('#fillEmptySquares').addEventListener('click', fillEmptySquaresWithRahmanTree);
+$('#analyzeAllWords').addEventListener('click', analyzeAllWords);
+
+// ربط أزرار التكبير
+$('#zoomIn').addEventListener('click', zoomIn);
+$('#zoomOut').addEventListener('click', zoomOut);
+
+/* تحديث الواجهة كلما تغيرت بيانات القاموس */
+function refreshAll(){ renderFigTable(); renderBoard(); renderHouses(); saveLocal(); }
+
+/* تنفيذ تحديث عند تحميل الصفحة أو تغييرات */
+window.addEventListener('beforeunload', ()=> saveLocal());
+</script>
+    <div class="sand-knowledge-interactive" id="sand-knowledge-interactive">
     <div class="section-header">
         <h2 class="section-title">قاعدة بيانات علم الرمل والجفر التفاعلية</h2>
     </div>
@@ -643,403 +1493,364 @@
         
         <div data-term="أبو_معشر_الفلكي">
             <h4>أبو معشر الفلكي</h4>
-            <p>عالم
-        <div class="tab-content active" id="input">
-            <h2>إدخال البيانات الأولية</h2>
-            
-            <div class="controls">
-                <div class="control-group">
-                    <label for="ascendant">الطالع (البرج الصاعد)</label>
-                    <select id="ascendant">
-                        <option value="1">الحمل (1)</option>
-                        <option value="2">الثور (2)</option>
-                        <option value="3">الجوزاء (3)</option>
-                        <option value="4">السرطان (4)</option>
-                        <option value="5">الأسد (5)</option>
-                        <option value="6">العذراء (6)</option>
-                        <option value="7">الميزان (7)</option>
-                        <option value="8">العقرب (8)</option>
-                        <option value="9">القوس (9)</option>
-                        <option value="10">الجدي (10)</option>
-                        <option value="11">الدلو (11)</option>
-                        <option value="12">الحوت (12)</option>
-                    </select>
-                    
-                    <label for="birthDate">تاريخ الميلاد</label>
-                    <input type="date" id="birthDate">
-                    
-                    <label for="question">السؤال أو الاستفسار</label>
-                    <textarea id="question" rows="3" placeholder="أدخل سؤالك هنا..."></textarea>
-                    
-                    <button id="calculate">احسب</button>
-                </div>
-                
-                <div class="control-group">
-                    <label for="mother1">الأم الأولى (4 خانات)</label>
-                    <input type="text" id="mother1" maxlength="4" placeholder="مثل: 1010">
-                    
-                    <label for="mother2">الأم الثانية (4 خانات)</label>
-                    <input type="text" id="mother2" maxlength="4" placeholder="مثل: 0101">
-                    
-                    <label for="mother3">الأم الثالثة (4 خانات)</label>
-                    <input type="text" id="mother3" maxlength="4" placeholder="مثل: 1100">
-                    
-                    <label for="mother4">الأم الرابعة (4 خانات)</label>
-                    <input type="text" id="mother4" maxlength="4" placeholder="مثل: 0011">
-                    
-                    <button id="generate">توليد البنات والحبيبات</button>
-                </div>
-            </div>
-            
-            <div class="result">
-                <h3>النتيجة الأولية</h3>
-                <div id="initialResult">سيظهر هنا نتيجة الحساب الأولي</div>
-            </div>
+            <p>عالم فلك وعراف مشهور عاش في العصر العباسي، يُعد من أبرز العلماء الذين كتبوا في علم الرمل والجفر. كتب كتاب "المجسطي الصغير" الذي يعتبر من أبرز المراجع في هذا العلم.</p>
+            <p>كان أبو معشر يجمع بين علم الفلك وعلم الرمل، ويستخدم الحركات الكوكبية في تفسير أشكال الرمل. اعتبرت كتبه مرجعاً أساسياً للعلماء اللاحقين في هذا المجال.</p>
         </div>
-
-        <div class="tab-content" id="board">
-            <h2>رقعة الشطرنج الناطقة</h2>
-            <p>انقر على أي مربع لرؤية التفاصيل الكاملة عنه</p>
-            
-            <div class="chess-board" id="chessBoard">
-                <!-- سيتم إنشاء رقعة الشطرنج ديناميكيًا -->
-            </div>
-            
-            <div class="controls">
-                <button id="fillRahman">ملء البيوت بشجرة الرحمن</button>
-                <button id="speakBoard">قراءة الرقعة نطقاً</button>
-                <button id="saveBoard">حفظ الرقعة</button>
-            </div>
-            
-            <div class="result">
-                <h3>تفاصيل المربع المحدد</h3>
-                <div id="squareDetails">اختر مربعاً لرؤية التفاصيل</div>
-            </div>
+        
+        <div data-term="البوني">
+            <h4>البوني</h4>
+            <p>عالم صوفي وفلكي مشهور، كتب العديد من الكتب في علم الجفر والطوالع. يعتبر كتابه "الأسرار الكبرى" من أبرز المراجع في علم الجفر.</p>
+            <p>البوني ربط بين علوم الحروف وعلوم الطوالع، ووضع قواعد دقيقة لاستخراج الأسرار من ترتيب الحروف والأعداد. اشتهر بعلومه الروحانية وكتبه التي تناولت أسرار الحروف والأعداد.</p>
         </div>
-
-        <div class="tab-content" id="houses">
-            <h2>البيوت الـ12 وتفسيراتها</h2>
-            
-            <div class="house-details" id="housesContainer">
-                <!-- سيتم ملء البيوت ديناميكيًا -->
-            </div>
-            
-            <div class="rahman-tree">
-                <h3>شجرة الرحمن</h3>
-                <p>هنا سيتم عرض تفاصيل شجرة الرحمن وعلاقتها بالبيوت بعد حسابها</p>
-                <div id="rahmanDetails"></div>
-            </div>
+        
+        <div data-term="الأعداد_مع_الحروف">
+            <h4>الأعداد مع الحروف</h4>
+            <p>نظام يعتمد على إعطاء قيمة رقمية لكل حرف من حروف الهجاء، حيث يبدأ من أ=1، ب=2، حتى غ=28.</p>
+            <p>في هذا النظام، يمكن تحويل أي كلمة إلى عدد، وتحليل هذا العدد للوصول إلى دلالات معينة. يستخدم هذا النظام في الجفر لفك الشفرات وتحليل الأسماء والأحداث.</p>
         </div>
-
-        <div class="tab-content" id="explanation">
-            <h2>التفسير والتحليل</h2>
-            
-            <div class="explanation">
-                <h3>تفسير الطالع والبرج الصاعد</h3>
-                <div id="ascendantExplanation"></div>
-                
-                <h3>الروابط الخارجية للشرح</h3>
-                <p>يمكنك الضغط على أي من الكلمات التالية للحصول على شرح مفصل:</p>
-                <p>
-                    <a href="#" class="external-link" data-word="الحمل">الحمل</a> |
-                    <a href="#" class="external-link" data-word="الثور">الثور</a> |
-                    <a href="#" class="external-link" data-word="الجوزاء">الجوزاء</a> |
-                    <a href="#" class="external-link" data-word="السرطان">السرطان</a> |
-                    <a href="#" class="external-link" data-word="الأسد">الأسد</a> |
-                    <a href="#" class="external-link" data-word="العذراء">العذراء</a> |
-                    <a href="#" class="external-link" data-word="الميزان">الميزان</a> |
-                    <a href="#" class="external-link" data-word="العقرب">العقرب</a> |
-                    <a href="#" class="external-link" data-word="القوس">القوس</a> |
-                    <a href="#" class="external-link" data-word="الجدي">الجدي</a> |
-                    <a href="#" class="external-link" data-word="الدلو">الدلو</a> |
-                    <a href="#" class="external-link" data-word="الحوت">الحوت</a>
-                </p>
-            </div>
-            
-            <div class="explanation">
-                <h3>تفسير البيوت والكواكب</h3>
-                <div id="housesExplanation"></div>
-            </div>
+        
+        <div data-term="قيمة_رقمية">
+            <h4>القيمة الرقمية للحروف</h4>
+            <p>كل حرف من حروف الهجاء العربية له قيمة رقمية محددة تبدأ من أ=1 وتنتهي بـ غ=28.</p>
+            <p>هذه القيم تستخدم في حساب الجمل، حيث يتم جمع القيم الرقمية للحروف في الكلمة أو الجملة للحصول على العدد الكلي الذي يحمل دلالة معينة في علم الجفر.</p>
         </div>
-
-        <div class="tab-content" id="about">
-            <h2>حول التطبيق</h2>
-            
-            <div class="explanation">
-                <h3>علم الرمل وفق منهج شجرة الرحمن</h3>
-                <p>هذا التطبيق يمثل نظامًا متكاملاً لحسابات علم الرمل وفق منهج شجرة الرحمن، الذي يجمع بين:</p>
-                <ul>
-                    <li>الأصول التقليدية لعلم الرمل</li>
-                    <li>منهج الشجرة الرحمانية في التفسير</li>
-                    <li>ربط البيوت بالكواكب والأبراج</li>
-                    <li>تفسير الأشكال وفق النظام الرباعي (أمهات، بنات، حبيبات)</li>
-                </ul>
-                
-                <h3>كيفية استخدام التطبيق</h3>
-                <ol>
-                    <li>ادخل البيانات الأساسية في تبويب الإدخال</li>
-                    <li>انتقل إلى تبويب الرقعة لرؤية النتائج على رقعة الشطرنج</li>
-                    <li>استخدم تبويب البيوت لرؤية التفاصيل الكاملة لكل بيت</li>
-                    <li>اطلع على التفسير الشامل في تبويب التفسير</li>
-                </ol>
-                
-                <h3>مصادر ومراجع</h3>
-                <p>للمزيد من المعلومات، يمكنك زيارة:</p>
-                <ul>
-                    <li><a href="#" class="external-link">موسوعة علم الرمل</a></li>
-                    <li><a href="#" class="external-link">شجرة الرحمن في تفسير الأشكال</a></li>
-                    <li><a href="#" class="external-link">البيوت والكواكب في علم الرمل</a></li>
-                </ul>
-            </div>
+        
+        <div data-term="28_منزلة_قمرية">
+            <h4>28 منزلة قمرية</h4>
+            <p>هي المنازل التي يمر بها القمر خلال شهر قمري، ولكل منزلة تأثير خاص على الأحداث على الأرض.</p>
+            <p>يرتبط نظام الجفر بـ 28 منزلة قمرية، حيث يقابل كل حرف من الحروف الـ 28 إحدى هذه المنازل، ويحمل تأثيرها وخصائصها.</p>
+        </div>
+        
+        <div data-term="الأسرار_الكاملة">
+            <h4>الأسرار الكاملة</h4>
+            <p>تشير إلى الجفر الكبير الذي يحتوي على جميع أسرار الحروف والأعداد وعلاقتها بالكون.</p>
+            <p>الجفر الكبير هو العلم الكامل الذي يعرفه العلماء الكبار، ويتضمن علاقات الحروف بالأجرام السماوية والقوى الكونية، وهو ما لا يُكشف إلا للعارفين حقاً.</p>
+        </div>
+        
+        <div data-term="لون_شهره">
+            <h4>لون الشهر في علم الرمل</h4>
+            <p>كل شهر من الشهور العربية يرتبط بلون معين يدل على طبيعة ذلك الشهر وتأثيره على الشخص.</p>
+            <p>مثلاً: ربيع الأول يرتبط باللون الأزرق، وصفر يرتبط باللون الأحمر، وهكذا. يمكن معرفة لون شهر الشخص من خلال علم الرمل مما يساعد في فهم طبيعته وتوقع أحداث حياته.</p>
+        </div>
+        
+        <div data-term="بشرته">
+            <h4>بشرة الشخص في علم الرمل</h4>
+            <p>علم الرمل يحدد لون بشرة الشخص بناءً على الأم أو البنت أو الحفيدة المسيطرة في رقمه.</p>
+            <p>مثلاً: من تسيطر عليه الأم الأولى تكون بشرته فاتحة، ومن تسيطر عليه الأم الثانية تكون بشرته سمراء، وهكذا. هذه المعلومة تساعد في التعرف على الشخص إذا لم يكن موجوداً أمام العارف.</p>
+        </div>
+        
+        <div data-term="طوله">
+            <h4>طول الشخص في علم الرمل</h4>
+            <p>يمكن لعلم الرمل تحديد طول الشخص بدقة مدهشة، سواء كان طويلاً أو قصيراً أو متوسط الطول.</p>
+            <p>مثلاً: من تسيطر عليه الأم الأولى يكون طوله متوسطاً إلى طويل، ومن تسيطر عليه الأم الرابعة يكون طوله قصيراً إلى متوسط. هذه المعلومة تستخدم في التعرف على الشخص من خلال سؤاله فقط.</p>
+        </div>
+        
+        <div data-term="الشخصية_الأولى">
+            <h4>الشخصية الأولى في علم الرمل</h4>
+            <p>هي الشخصية التي تسيطر عليها الأم الأولى "الكاتبة"، وتتميز بأنها ذكية وسريعة البديهة لكنها متشتتة أحياناً.</p>
+            <p>الشخصية التي تسيطر عليها الأم الأولى تتميز بالتفكير السريع والقدرة على التكيف مع المواقف الجديدة، لكنها قد تفتقر إلى التركيز في بعض الأحيان.</p>
+        </div>
+        
+        <div data-term="الشخصية_الثانية">
+            <h4>الشخصية الثانية في علم الرمل</h4>
+            <p>هي الشخصية التي تسيطر عليها الأم الثانية "الطاوية"، وتتميز بأنها قوية ومتحمسة وصريحة.</p>
+            <p>الشخصية التي تسيطر عليها الأم الثانية تتميز بالشجاعة والقدرة على مواجهة التحديات، لكنها قد تكون عدوانية أحياناً بسبب حماسها الزائد.</p>
+        </div>
+        
+        <div data-term="الشخصية_الثالثة">
+            <h4>الشخصية الثالثة في علم الرمل</h4>
+            <p>هي الشخصية التي تسيطر عليها الأم الثالثة "الهوائية"، وتتميز بأنها اجتماعية وفضولية ومتفائلة.</p>
+            <p>الشخصية التي تسيطر عليها الأم الثالثة تتميز بالقدرة على التواصل مع الآخرين وحب الاستطلاع، لكنها قد تكون غير جادة في بعض الأحيان.</p>
+        </div>
+        
+        <div data-term="الشخصية_الرابعة">
+            <h4>الشخصية الرابعة في علم الرمل</h4>
+            <p>هي الشخصية التي تسيطر عليها الأم الرابعة "الأرضية"، وتتميز بأنها هادئة ومستقرة وعملية.</p>
+            <p>الشخصية التي تسيطر عليها الأم الرابعة تتميز بالاستقرار العاطفي والتفكير العملي، لكنها قد تكون بطيئة في اتخاذ القرارات أحياناً.</p>
+        </div>
+        
+        <div data-term="أبو_معشر_الوجوه">
+            <h4>أبو معشر والوجوه الأربعة</h4>
+            <p>أبو معشر الفلكي هو أول من وضع نظام الوجوه الأربعة في علم الرمل، وربط كل وجه بخصائص محددة.</p>
+            <p>أبو معشر ربط بين الوجوه الأربعة والعناصر الأربعة (الماء، النار، الهواء، الأرض)، وحدد استخدام كل وجه في مجال معين من مجالات الحياة.</p>
+        </div>
+        
+        <div data-term="البوني_الوجوه">
+            <h4>البوني والوجوه الأربعة</h4>
+            <p>البوني عزز نظام الوجوه الأربعة الذي وضعه أبو معشر، وأضاف تفاصيل دقيقة لاستخدام كل وجه.</p>
+            <p>البوني ربط بين الوجوه الأربعة وعلوم الجفر، ووضع قواعد لتحديد الوجه المناسب لكل سؤال أو مشكلة.</p>
         </div>
     </div>
+</div>
 
-    <div class="modal" id="wordModal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 id="modalTitle">شرح الكلمة</h2>
-            <div id="modalContent"></div>
-        </div>
-    </div>
-
-    <script>
-        // البيانات الأساسية
-        const houses = [
-            { number: 1, name: "بيت الحياة", planet: "المشتري", sign: "الحمل", meaning: "يدل على الذات والصحة والعمر" },
-            { number: 2, name: "بيت المال", planet: "الزهرة", sign: "الثور", meaning: "يدل على الأموال والمكاسب والممتلكات" },
-            { number: 3, name: "بيت الإخوة", planet: "عطارد", sign: "الجوزاء", meaning: "يدل على الإخوة والأقارب والجيران" },
-            { number: 4, name: "بيت الوالدين", planet: "القمر", sign: "السرطان", meaning: "يدل على الوالدين والمنزل والأصول" },
-            { number: 5, name: "بيت الأولاد", planet: "الشمس", sign: "الأسد", meaning: "يدل على الأولاد والملذات والحب" },
-            { number: 6, name: "بيت الأمراض", planet: "عطارد", sign: "العذراء", meaning: "يدل على الأمراض والهموم والأعداء" },
-            { number: 7, name: "بيت الزواج", planet: "الزهرة", sign: "الميزان", meaning: "يدل على الزواج والشركاء والعلاقات" },
-            { number: 8, name: "بيت الموت", planet: "المريخ", sign: "العقرب", meaning: "يدل على الموت والميراث والتحولات" },
-            { number: 9, name: "بيت السفر", planet: "المشتري", sign: "القوس", meaning: "يدل على السفر والدين والفلسفة" },
-            { number: 10, name: "بيت الملك", planet: "زحل", sign: "الجدي", meaning: "يدل على المهنة والمنصب والسلطة" },
-            { number: 11, name: "بيت الأمل", planet: "زحل", sign: "الدلو", meaning: "يدل على الأصدقاء والأمال والرغبات" },
-            { number: 12, name: "بيت الأعداء", planet: "المريخ", sign: "الحوت", meaning: "يدل على الأعداء والخصوم والمحن" }
-        ];
-
-        const signs = [
-            { id: 1, name: "الحمل", element: "ناري", planet: "المريخ", meaning: "برج ناري يتميز بالقيادية والطاقة العالية" },
-            { id: 2, name: "الثور", element: "ترابي", planet: "الزهرة", meaning: "برج ترابي يتميز بالثبات والعناد والتمسك بالأرض" },
-            { id: 3, name: "الجوزاء", element: "هوائي", planet: "عطارد", meaning: "برج هوائي يتميز بالذكاء والتواصل والتغير" },
-            { id: 4, name: "السرطان", element: "مائي", planet: "القمر", meaning: "برج مائي يتميز بالعاطفة والحنان والتمسك بالأسرة" },
-            { id: 5, name: "الأسد", element: "ناري", planet: "الشمس", meaning: "برج ناري يتميز بالكرم والقيادة والثقة بالنفس" },
-            { id: 6, name: "العذراء", element: "ترابي", planet: "عطارد", meaning: "برج ترابي يتميز بالتحليل والدقة والنظام" },
-            { id: 7, name: "الميزان", element: "هوائي", planet: "الزهرة", meaning: "برج هوائي يتميز بالتوازن والجمال والعدالة" },
-            { id: 8, name: "العقرب", element: "مائي", planet: "المريخ", meaning: "برج مائي يتميز بالعمق والغموض والقوة" },
-            { id: 9, name: "القوس", element: "ناري", planet: "المشتري", meaning: "برج ناري يتميز بالتفاؤل والسفر والفلسفة" },
-            { id: 10, name: "الجدي", element: "ترابي", planet: "زحل", meaning: "برج ترابي يتميز بالطموح والمسؤولية والانضباط" },
-            { id: 11, name: "الدلو", element: "هوائي", planet: "زحل", meaning: "برج هوائي يتميز بالإبداع والتمرد والإنسانية" },
-            { id: 12, name: "الحوت", element: "مائي", planet: "المشتري", meaning: "برج مائي يتميز بالحدس والعاطفة والتضحية" }
-        ];
-
-        const wordExplanations = {
-            "الحمل": "برج ناري Cardinal-North، الكوكب: المريخ، العنصر: ناري، العدد: 1، البيوت: 1، 8، 9",
-            "الثور": "برج ترابي Fixed-North، الكوكب: الزهرة، العنصر: ترابي، العدد: 2، البيوت: 2، 7، 10",
-            "الجوزاء": "برج هوائي Mutable-North، الكوكب: عطارد، العنصر: هوائي، العدد: 3، البيوت: 3، 6، 11",
-            "السرطان": "برج مائي Cardinal-West، الكوكب: القمر، العنصر: مائي، العدد: 4، البيوت: 4، 5، 12",
-            "الأسد": "برج ناري Fixed-West، الكوكب: الشمس، العنصر: ناري، العدد: 5، البيوت: 1، 5، 9",
-            "العذراء": "برج ترابي Mutable-West، الكوكب: عطارد، العنصر: ترابي، العدد: 6، البيوت: 2، 6، 10",
-            "الميزان": "برج هوائي Cardinal-South، الكوكب: الزهرة، العنصر: هوائي، العدد: 7، البيوت: 3، 7، 11",
-            "العقرب": "برج مائي Fixed-South، الكوكب: المريخ، العنصر: مائي، العدد: 8، البيوت: 4، 8، 12",
-            "القوس": "برج ناري Mutable-South، الكوكب: المشتري، العنصر: ناري، العدد: 9، البيوت: 1، 5، 9",
-            "الجدي": "برج ترابي Cardinal-East، الكوكب: زحل، العنصر: ترابي، العدد: 10، البيوت: 2， 6، 10",
-            "الدلو": "برج هوائي Fixed-East، الكوكب: زحل، العنصر: هوائي، العدد: 11، البيوت: 3، 7، 11",
-            "الحوت": "برج مائي Mutable-East، الكوكب: المشتري، العنصر: مائي، العدد: 12، البيوت: 4، 8، 12"
-        };
-
-        // توليد رقعة الشطرنج
-        function generateChessBoard() {
-            const board = document.getElementById('chessBoard');
-            board.innerHTML = '';
-            
-            for (let row = 8; row >= 1; row--) {
-                for (let col = 0; col < 8; col++) {
-                    const square = document.createElement('div');
-                    const isLight = (row + col) % 2 === 0;
-                    square.className = `square ${isLight ? 'light' : 'dark'}`;
-                    
-                    // تحديد نوع المربع (أم، ابنة، حفيدة)
-                    if (row === 8 || row === 1) {
-                        square.classList.add('mother');
-                    } else if (row === 7 || row === 2) {
-                        square.classList.add('daughter');
-                    } else {
-                        square.classList.add('granddaughter');
-                    }
-                    
-                    const squareContent = document.createElement('div');
-                    squareContent.className = 'square-content';
-                    
-                    // محتوى المربع حسب موقعه
-                    if (row === 8) {
-                        squareContent.innerHTML = `بيت ${8-col}<br>${houses[7-col]?.name || ''}`;
-                    } else if (row === 1) {
-                        squareContent.innerHTML = `بيت ${col+1}<br>${houses[col]?.name || ''}`;
-                    } else if (row === 7 || row === 2) {
-                        squareContent.innerHTML = `ابنة ${row}${col+1}`;
-                    } else {
-                        squareContent.innerHTML = `حفيدة ${row}${col+1}`;
-                    }
-                    
-                    square.appendChild(squareContent);
-                    square.addEventListener('click', () => showSquareDetails(row, col));
-                    board.appendChild(square);
-                }
-            }
+<style>
+    .sand-knowledge-interactive {
+        background: rgba(30, 60, 114, 0.15);
+        border-radius: 15px;
+        padding: 25px;
+        margin: 30px 0;
+        position: relative;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .instructions {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 15px;
+        margin: 20px 0;
+        border-left: 3px solid #ffd700;
+    }
+    
+    .instructions i {
+        color: #ffd700;
+        margin-right: 8px;
+    }
+    
+    .interactive-container {
+        display: flex;
+        gap: 25px;
+        margin-top: 25px;
+    }
+    
+    .knowledge-content {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 25px;
+        border-radius: 10px;
+        line-height: 1.8;
+    }
+    
+    .knowledge-content h3 {
+        color: #ffd700;
+        margin: 25px 0 15px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .knowledge-content ul {
+        padding-right: 20px;
+        margin: 15px 0;
+    }
+    
+    .knowledge-content li {
+        margin-bottom: 10px;
+    }
+    
+    .keyword {
+        color: #ffd700;
+        cursor: pointer;
+        position: relative;
+        padding-bottom: 2px;
+        transition: all 0.3s ease;
+    }
+    
+    .keyword:hover {
+        color: white;
+        text-shadow: 0 0 8px rgba(255, 215, 0, 0.7);
+    }
+    
+    .keyword:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background: #ffd700;
+        transition: width 0.3s ease;
+    }
+    
+    .keyword:hover:after {
+        width: 100%;
+    }
+    
+    .info-panel {
+        width: 380px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        height: 500px;
+    }
+    
+    .info-header {
+        background: linear-gradient(90deg, #1e3c72, #2a5298);
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .info-header h4 {
+        margin: 0;
+        color: white;
+        font-weight: 600;
+    }
+    
+    .info-close {
+        color: rgba(255, 255, 255, 0.7);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .info-close:hover {
+        color: white;
+        transform: scale(1.1);
+    }
+    
+    .info-content {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        background: rgba(0, 0, 0, 0.1);
+    }
+    
+    .info-placeholder {
+        text-align: center;
+        padding: 40px 20px;
+        color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .info-placeholder i {
+        font-size: 3rem;
+        margin-bottom: 15px;
+        color: rgba(255, 215, 0, 0.5);
+    }
+    
+    .symbol {
+        font-size: 2.5rem;
+        text-align: center;
+        margin: 15px 0;
+        color: #ffd700;
+    }
+    
+    .info-content p {
+        margin-bottom: 12px;
+        line-height: 1.6;
+    }
+    
+    .info-content h4 {
+        color: #ffd700;
+        margin-bottom: 15px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    @media (max-width: 992px) {
+        .interactive-container {
+            flex-direction: column;
         }
-
-        // عرض تفاصيل المربع
-        function showSquareDetails(row, col) {
-            const details = document.getElementById('squareDetails');
-            let content = '';
-            
-            if (row === 8) {
-                const house = houses[7-col];
-                content = `
-                    <h3>${house.name} (بيت ${house.number})</h3>
-                    <p><strong>الكوكب:</strong> ${house.planet}</p>
-                    <p><strong>البرج:</strong> ${house.sign}</p>
-                    <p><strong>التفسير:</strong> ${house.meaning}</p>
-                    <p><a href="#" class="external-link" data-word="${house.sign}">شرح برج ${house.sign}</a></p>
-                `;
-            } else if (row === 1) {
-                const house = houses[col];
-                content = `
-                    <h3>${house.name} (بيت ${house.number})</h3>
-                    <p><strong>الكوكب:</strong> ${house.planet}</p>
-                    <p><strong>البرج:</strong> ${house.sign}</p>
-                    <p><strong>التفسير:</strong> ${house.meaning}</p>
-                    <p><a href="#" class="external-link" data-word="${house.sign}">شرح برج ${house.sign}</a></p>
-                `;
-            } else if (row === 7 || row === 2) {
-                content = `
-                    <h3>ابنة ${row}${col+1}</h3>
-                    <p>هذا المربع يمثل ابنة من بنات الأمهات الأربع</p>
-                    <p>سيتم ملؤه تلقائياً عند استخدام خيار "ملء البيوت بشجرة الرحمن"</p>
-                `;
-            } else {
-                content = `
-                    <h3>حفيدة ${row}${col+1}</h3>
-                    <p>هذا المربع يمثل حفيدة من حفيدات الأمهات الأربع</p>
-                    <p>سيتم ملؤه تلقائياً عند استخدام خيار "ملء البيوت بشجرة الرحمن"</p>
-                `;
-            }
-            
-            details.innerHTML = content;
-            attachExternalLinksListeners();
+        
+        .info-panel {
+            width: 100%;
+            height: auto;
+            max-height: 500px;
         }
+    }
+</style>
 
-        // عرض تفاصيل البيوت
-        function renderHousesDetails() {
-            const container = document.getElementById('housesContainer');
-            container.innerHTML = '';
-            
-            houses.forEach(house => {
-                const card = document.createElement('div');
-                card.className = 'house-card';
-                card.innerHTML = `
-                    <h4>${house.name} (بيت ${house.number})</h4>
-                    <p><strong>الكوكب:</strong> ${house.planet}</p>
-                    <p><strong>البرج:</strong> ${house.sign}</p>
-                    <p><strong>التفسير:</strong> ${house.meaning}</p>
-                    <p><a href="#" class="external-link" data-word="${house.sign}">شرح برج ${house.sign}</a></p>
-                `;
-                container.appendChild(card);
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // العثور على جميع الكلمات المفتاحية في النص
+        const keywords = document.querySelectorAll('.keyword');
+        const infoContent = document.querySelector('.info-content');
+        const infoPlaceholder = document.querySelector('.info-placeholder');
+        const infoClose = document.querySelector('.info-close');
+        
+        // دالة لعرض المعلومات
+        function showInfo(term) {
+            // إزالة التمييز من جميع الكلمات
+            keywords.forEach(keyword => {
+                keyword.classList.remove('active');
             });
             
-            attachExternalLinksListeners();
+            // تمييز الكلمة الحالية
+            const activeKeywords = document.querySelectorAll(`.keyword[data-term="${term}"]`);
+            activeKeywords.forEach(keyword => {
+                keyword.classList.add('active');
+            });
+            
+            // العثور على المعلومات من قاعدة البيانات
+            const databaseEntry = document.querySelector(`.sand-database [data-term="${term}"]`);
+            
+            if (databaseEntry) {
+                // إخفاء النص الافتراضي
+                infoPlaceholder.style.display = 'none';
+                
+                // عرض محتوى قاعدة البيانات
+                infoContent.innerHTML = databaseEntry.innerHTML;
+                
+                // إضافة تأثير ظهور
+                infoContent.style.opacity = 0;
+                setTimeout(() => {
+                    infoContent.style.opacity = 1;
+                }, 50);
+            }
         }
-
-        // إضافة مستمعين للروابط الخارجية
-        function attachExternalLinksListeners() {
-            document.querySelectorAll('.external-link').forEach(link => {
-                link.addEventListener('click', function(e) {
+        
+        // إضافة أحداث لكل كلمة مفتاحية
+        keywords.forEach(keyword => {
+            const term = keyword.getAttribute('data-term');
+            
+            // عند المرور بالفأرة
+            keyword.addEventListener('mouseenter', function() {
+                this.style.textDecoration = 'underline';
+            });
+            
+            // عند إزالة الفأرة
+            keyword.addEventListener('mouseleave', function() {
+                if (!this.classList.contains('active')) {
+                    this.style.textDecoration = 'none';
+                }
+            });
+            
+            // عند النقر
+            keyword.addEventListener('click', function(e) {
+                e.preventDefault();
+                showInfo(term);
+            });
+        });
+        
+        // إغلاق مربع المعلومات
+        infoClose.addEventListener('click', function() {
+            infoContent.innerHTML = '';
+            infoPlaceholder.style.display = 'block';
+            
+            // إزالة التمييز من جميع الكلمات
+            keywords.forEach(keyword => {
+                keyword.classList.remove('active');
+                keyword.style.textDecoration = 'none';
+            });
+        });
+        
+        // تفعيل التفاعل مع النقر على الهاتف
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            keywords.forEach(keyword => {
+                keyword.addEventListener('touchstart', function(e) {
                     e.preventDefault();
-                    const word = this.getAttribute('data-word');
-                    showWordExplanation(word);
+                    const term = this.getAttribute('data-term');
+                    showInfo(term);
                 });
             });
         }
-
-        // عرض شرح الكلمة في النافذة المنبثقة
-        function showWordExplanation(word) {
-            const modal = document.getElementById('wordModal');
-            const title = document.getElementById('modalTitle');
-            const content = document.getElementById('modalContent');
+        
+        // تأثيرات إضافية عند المرور
+        keywords.forEach(keyword => {
+            keyword.addEventListener('mouseenter', function() {
+                this.style.position = 'relative';
+                this.style.zIndex = '10';
+                this.style.transform = 'scale(1.05)';
+            });
             
-            title.textContent = `شرح كلمة: ${word}`;
-            content.textContent = wordExplanations[word] || 'لا يوجد شرح متاح لهذه الكلمة.';
-            
-            modal.style.display = 'block';
-        }
-
-        // إغلاق النافذة المنبثقة
-        document.querySelector('.close').addEventListener('click', function() {
-            document.getElementById('wordModal').style.display = 'none';
-        });
-
-        // إغلاق النافذة المنبثقة بالنقر خارجها
-        window.addEventListener('click', function(event) {
-            const modal = document.getElementById('wordModal');
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
-
-        // تبديل التبويبات
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                // إزالة النشاط من جميع التبويبات
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                
-                // إضافة النشاط للتبويب المحدد
-                this.classList.add('active');
-                const tabId = this.getAttribute('data-tab');
-                document.getElementById(tabId).classList.add('active');
-                
-                // إذا كان التبويب هو البيوت، قم بعرض تفاصيل البيوت
-                if (tabId === 'houses') {
-                    renderHousesDetails();
-                }
+            keyword.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
             });
         });
-
-        // توليد البنات والحبيبات
-        document.getElementById('generate').addEventListener('click', function() {
-            const mother1 = document.getElementById('mother1').value;
-            const mother2 = document.getElementById('mother2').value;
-            const mother3 = document.getElementById('mother3').value;
-            const mother4 = document.getElementById('mother4').value;
-            
-            if (!mother1 || !mother2 || !mother3 || !mother4) {
-                alert('يرجى إدخال جميع الأمهات الأربع');
-                return;
-            }
-            
-            // هنا سيتم إضافة منطق توليد البنات والحبيبات
-            alert('تم توليد البنات والحبيبات بنجاح');
-        });
-
-        // ملء البيوت بشجرة الرحمن
-        document.getElementById('fillRahman').addEventListener('click', function() {
-            // هنا سيتم إضافة منطق ملء البيوت بشجرة الرحمن
-            alert('تم ملء البيوت بشجرة الرحمن بنجاح');
-        });
-
-        // تهيئة التطبيق عند تحميل الصفحة
-        window.addEventListener('load', function() {
-            generateChessBoard();
-            renderHousesDetails();
-            attachExternalLinksListeners();
-            
-            // تعيين تاريخ اليوم كتاريخ افتراضي
-            const today = new Date().toISOString().substr(0, 10);
-            document.getElementById('birthDate').value = today;
-        });
-    </script>
+    });
+</script>
 </body>
-
 </html>
